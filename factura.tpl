@@ -16,21 +16,9 @@
     <link href="templates/{$template}/css/invoice.css" rel="stylesheet">
 
 </head>
-
-<ul class="navsub">
-	<li><a href="http://ecuadorhosting.host/sandbox/clientarea.php?action=details">Actualizar mis Datos de Facturacion</a></li>
-</ul>	
-
-<p>DESCARGUE SUS DOCUMENTOS ELECTRONICOS.......</p>
-
-{include file="$template/includes/tablelist.tpl" tableName="InvoicesList" filterColumn="5"}
-
-		<div class="bigheader">
-			<center><h2>{"COMPROBANTES ELECTRONICOS"}</h2></center>
-		</div><!-- .bigheader -->
 		
 <div class="table-responsive">
-<table class="table table-condensed">
+<table id="tableInvoicesListClient" class="table table-condensed">
   <thead>
     <tr>
       <th class="text-center"> Tipo </th>

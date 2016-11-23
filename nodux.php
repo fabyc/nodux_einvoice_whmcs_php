@@ -3,6 +3,9 @@ require_once 'phpxmlrpc-4.0.0/lib/xmlrpc.inc' ;
 require_once 'phpxmlrpc-4.0.0/lib/xmlrpcs.inc' ;
 require_once 'phpxmlrpc-4.0.0/lib/xmlrpc_wrappers.inc' ;
 
+#yamburara
+#id = 2
+#razon = 9
 
 $factura = $_POST['id_invoice'];
 $notaCredito = $_POST['id_credito'];
@@ -24,8 +27,8 @@ if ( ($_SERVER['HTTP_HOST']=="nodored.com" || $_SERVER['HTTP_HOST']=="www.nodore
        $id_cbte = $notaCredito;
     }
 
-    $conn = mysql_connect("localhost","qoxbvsed","Nodux3524");
-    mysql_select_db("qoxbvsed_whmc868",$conn);
+    $conn = mysql_connect("localhost","joomfast_82015","u58Uea(E2oW]");
+    mysql_select_db("joomfast_82015",$conn);
     $query = ("SELECT * FROM wp_comprobantes WHERE cedula = '$user'");
     $result = mysql_query($query, $conn);
 
@@ -36,11 +39,13 @@ if ( ($_SERVER['HTTP_HOST']=="nodored.com" || $_SERVER['HTTP_HOST']=="www.nodore
       $data_client = mysql_fetch_array($result_client);
       $client = $data_client[0];
       $result_invoice = mysql_query('SELECT id, date, duedate, subtotal, total FROM tblinvoices WHERE id='. $id_cbte);
-      $result_id = mysql_query('SELECT value FROM tblcustomfieldsvalues WHERE relid=' . $client);
+      $result_id = mysql_query('SELECT value FROM tblcustomfieldsvalues WHERE fieldid = 11 and relid=' . $client);
+      $result_razon_social = mysql_query('SELECT value FROM tblcustomfieldsvalues WHERE fieldid = 47 and relid=' . $client);
       $result_items = mysql_query('SELECT description, amount FROM tblinvoiceitems WHERE invoiceid='. $id_cbte);
       $result_clients = mysql_query('SELECT firstname, lastname, email, address1, city, state, country, phonenumber FROM tblclients WHERE id='. $client);
       $data = mysql_fetch_array($result_invoice);
       $data_id = mysql_fetch_array($result_id);
+      $data_razon_social = mysql_fetch_array($result_razon_social);
       $data_clients = mysql_fetch_array($result_clients);
 
     $id = $data[0];
@@ -50,6 +55,8 @@ if ( ($_SERVER['HTTP_HOST']=="nodored.com" || $_SERVER['HTTP_HOST']=="www.nodore
     $total = $data[4];
 
     $identificacion = $data_id[0];
+
+    $razon_social = $data_razon_social[0];
 
     $firstname = $data_clients[0];
     $lastname = $data_clients[1];
@@ -64,7 +71,7 @@ if ( ($_SERVER['HTTP_HOST']=="nodored.com" || $_SERVER['HTTP_HOST']=="www.nodore
       $datos[]= $row[0]." -- ".$row[1];
       }
 
-    function sendInvoice($url, $user, $pass, $tipo, $id, $date, $duedate, $subtotal, $total, $identificacion, $datos, $firstname, $lastname, $email, $address, $city, $state, $country,$phonenumber) {
+    function sendInvoice($url, $user, $pass, $tipo, $id, $date, $duedate, $subtotal, $total, $identificacion, $datos, $razon_social, $firstname, $lastname, $email, $address, $city, $state, $country,$phonenumber) {
 
         $server = new xmlrpc_client($url);
         $message = new xmlrpcmsg('model.einvoice.einvoice.save_invoice',

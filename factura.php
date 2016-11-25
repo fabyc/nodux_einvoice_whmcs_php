@@ -18,7 +18,10 @@ if ($ca->isLoggedIn()) {
   $user = 'whmcs';
   $pass = 'whmcs12354';
 
-  $result = mysql_query('SELECT value FROM tblcustomfieldsvalues WHERE relid=' . $ca->getUserID());
+  #yamburara
+  #$result = mysql_query('SELECT value FROM tblcustomfieldsvalues WHERE fieldid = 2 and relid=' . $ca->getUserID());
+
+  $result = mysql_query('SELECT value FROM tblcustomfieldsvalues WHERE fieldid = 11 and relid=' . $ca->getUserID());
   $data = mysql_fetch_array($result);
   $identificacion = $data[0];
 

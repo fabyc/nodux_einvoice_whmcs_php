@@ -31,8 +31,8 @@
   <tbody>
   {foreach from=$resulthtml key=num item=row}
     <tr>
-      {if $row[0] eq "e_invoice"} <td class="text-center">Factura </td>
-      {elseif $row[0] eq "e_credit_note"} <td class="text-center">Nota de Credito</td>
+      {if $row[0] eq "out_invoice"} <td class="text-center">Factura </td>
+      {elseif $row[0] eq "out_credit_note"} <td class="text-center">Nota de Credito</td>
       {/if}
       <td class="text-center"> {$row[1]} </td>
       <td class="text-center"> {$row[2]} </td>

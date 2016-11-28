@@ -220,8 +220,17 @@
     <li><a id="Menu-Help-Community_Forums" href="http://forum.whmcs.com/" target="_blank">{$_ADMINLANG.help.forums}</a></li>
   </ul>
 </li>
-<li>
 
+<li>
+<form action="nodux/nodux.php" method="post">
+  <input type="text" size="15" name="ride" class="form-control input-sm" />
+  <ul>
+  <input type="submit" value="RIDE(pdf)"/>
+  </ul>
+</form>
+</li>
+
+<li>
 <form action="nodux/nodux.php" method="post">
   <input type="text" size="15" name="id_invoice" class="form-control input-sm" />
   <ul>

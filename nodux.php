@@ -3,19 +3,51 @@ require_once 'phpxmlrpc-4.0.0/lib/xmlrpc.inc' ;
 require_once 'phpxmlrpc-4.0.0/lib/xmlrpcs.inc' ;
 require_once 'phpxmlrpc-4.0.0/lib/xmlrpc_wrappers.inc' ;
 
-#yamburara
-#id = 2
-#razon = 9
 
 $factura = $_POST['id_invoice'];
 $notaCredito = $_POST['id_credito'];
+$ride = $_POST['ride'];
 
 $url = 'http://162.248.52.245:3470/';
 $db = 'nodux_nodored';
 $user = 'whmcs';
 $pass = 'whmcs12354';
+$formato = 'pdf';
+
 
 if ( ($_SERVER['HTTP_HOST']=="nodored.com" || $_SERVER['HTTP_HOST']=="www.nodored.com") && $_SERVER['SERVER_ADDR']=="67.225.176.145" ) {
+
+    if ($ride != "") {
+    	function getPathAdm($url, $user, $pass, $ride) {
+	    $server = new xmlrpc_client($url);
+	    $message = new xmlrpcmsg('model.einvoice.einvoice.get_path_adm',
+	    		array(new xmlrpcval($ride, 'string'),
+	                    new xmlrpcval([], 'struct')));
+
+	    $server->setCredentials($user, $pass);
+	    $server->return_type = 'phpvals';
+	    $result=$server->send($message);
+	    $result=$result->value();
+	    return $result;
+	  }
+
+	  $resulthtml = getPathAdm($url . $db, $user, $pass, $ride);
+	  header('Content-Type: application/octet-stream');
+	  header('Content-Disposition: attachment; filename=' . 'comp_elect_'.$ride .'.' . $formato);
+	  header('Content-Transfer-Encoding: binary');
+	  header('Expires: 0');
+	  header('Cache-Control: must-revalidate');
+	  header('Pragma: public');
+	  header('Content-Length: ' . strlen($resulthtml));
+	  ob_clean();
+	  flush();
+
+	  echo $resulthtml;
+
+	  exit();
+
+    }
+    if ($ride == "") {
 
     if ($factura != "") {
        $tipo = "factura";
@@ -38,7 +70,7 @@ if ( ($_SERVER['HTTP_HOST']=="nodored.com" || $_SERVER['HTTP_HOST']=="www.nodore
       $result_client = mysql_query('SELECT userid FROM tblinvoices WHERE id='. $id_cbte);
       $data_client = mysql_fetch_array($result_client);
       $client = $data_client[0];
-      $result_invoice = mysql_query('SELECT id, date, duedate, subtotal, total FROM tblinvoices WHERE id='. $id_cbte);
+      $result_invoice = mysql_query('SELECT id, date, duedate, subtotal, tax FROM tblinvoices WHERE id='. $id_cbte);
       $result_id = mysql_query('SELECT value FROM tblcustomfieldsvalues WHERE fieldid = 11 and relid=' . $client);
       $result_razon_social = mysql_query('SELECT value FROM tblcustomfieldsvalues WHERE fieldid = 47 and relid=' . $client);
       $result_items = mysql_query('SELECT description, amount FROM tblinvoiceitems WHERE invoiceid='. $id_cbte);
@@ -83,6 +115,7 @@ if ( ($_SERVER['HTTP_HOST']=="nodored.com" || $_SERVER['HTTP_HOST']=="www.nodore
                         new xmlrpcval($total, 'string'),
                         new xmlrpcval($identificacion, 'string'),
                         new xmlrpcval(xmlrpc_encode(array($datos))),
+                        new xmlrpcval($razon_social, 'string'),
                         new xmlrpcval($firstname, 'string'),
                         new xmlrpcval($lastname, 'string'),
                         new xmlrpcval($email, 'string'),
@@ -99,7 +132,7 @@ if ( ($_SERVER['HTTP_HOST']=="nodored.com" || $_SERVER['HTTP_HOST']=="www.nodore
         return $result;
        }
 
-    $resultado = sendInvoice($url . $db, $user, $pass, $tipo, $id, $date, $duedate, $subtotal, $total, $identificacion, $datos, $firstname, $lastname, $email, $address, $city, $state, $country,$phonenumber);
+    $resultado = sendInvoice($url . $db, $user, $pass, $tipo, $id, $date, $duedate, $subtotal, $total, $identificacion, $datos, $razon_social, $firstname, $lastname, $email, $address, $city, $state, $country,$phonenumber);
     $origen= $_SERVER["HTTP_REFERER"];
 
     if ($resultado) {
@@ -181,7 +214,7 @@ if ( ($_SERVER['HTTP_HOST']=="nodored.com" || $_SERVER['HTTP_HOST']=="www.nodore
 
     echo "<script language='javascript'>function redireccionar(){window.location=origen;}</script>";
     echo "<script language='JavaScript'>setTimeout ('redireccionar()', 1);</script>";
-
+}
 }else{
     $origen= $_SERVER["HTTP_REFERER"];
 

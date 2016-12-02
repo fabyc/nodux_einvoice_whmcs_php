@@ -80,27 +80,27 @@ if ( ($_SERVER['HTTP_HOST']=="nodored.com" || $_SERVER['HTTP_HOST']=="www.nodore
       $data_razon_social = mysql_fetch_array($result_razon_social);
       $data_clients = mysql_fetch_array($result_clients);
 
-    $id = $data[0];
-    $date = $data[1];
-    $duedate = $data[2];
-    $subtotal = $data[3];
-    $total = $data[4];
+      $id = utf8_decode($data[0]);
+      $date = utf8_decode($data[1]);
+      $duedate = utf8_decode($data[2]);
+      $subtotal = utf8_decode($data[3]);
+      $total = utf8_decode($data[4]);
 
-    $identificacion = $data_id[0];
+      $identificacion = utf8_decode($data_id[0]);
 
-    $razon_social = $data_razon_social[0];
+      $razon_social = utf8_decode($data_razon_social[0]);
 
-    $firstname = $data_clients[0];
-    $lastname = $data_clients[1];
-    $email = $data_clients[2];
-    $address = $data_clients[3];
-    $city = $data_clients[4];
-    $state= $data_clients[5];
-    $country = $data_clients[6];
-    $phonenumber = $data_clients[7];
+      $firstname = utf8_decode($data_clients[0]);
+      $lastname = utf8_decode($data_clients[1]);
+      $email = utf8_decode($data_clients[2]);
+      $address = utf8_decode($data_clients[3]);
+      $city = utf8_decode($data_clients[4]);
+      $state= utf8_decode($data_clients[5]);
+      $country = utf8_decode($data_clients[6]);
+      $phonenumber = utf8_decode($data_clients[7]);
 
-    while ($row = mysql_fetch_array($result_items)){
-      $datos[]= $row[0]." -- ".$row[1];
+      while ($row = mysql_fetch_array($result_items)){
+        $datos[]= $row[0]." -- ".$row[1];
       }
 
     function sendInvoice($url, $user, $pass, $tipo, $id, $date, $duedate, $subtotal, $total, $identificacion, $datos, $razon_social, $firstname, $lastname, $email, $address, $city, $state, $country,$phonenumber) {
